@@ -34,7 +34,7 @@ Required settings:
   "Rag": {
     "DefaultTopK": 5,
     "MaxTopK": 18,
-    "MinScoreThreshold": 0.62,
+    "MinScoreThreshold": 0.0,
     "Temperature": 0.1,
     "MaxOutputTokens": 800,
     "MaxQuestionLength": 1000,

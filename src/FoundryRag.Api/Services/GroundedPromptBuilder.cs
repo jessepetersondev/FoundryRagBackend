@@ -1,11 +1,12 @@
 using System.Text;
+using System.Text.RegularExpressions;
 using FoundryRag.Api.Models;
 using FoundryRag.Api.Options;
 using Microsoft.Extensions.Options;
 
 namespace FoundryRag.Api.Services;
 
-public sealed class GroundedPromptBuilder : IPromptBuilder
+public sealed partial class GroundedPromptBuilder : IPromptBuilder
 {
     private readonly RagOptions _options;
 
@@ -39,6 +40,9 @@ public sealed class GroundedPromptBuilder : IPromptBuilder
         userMessage.AppendLine("User question:");
         userMessage.AppendLine(question.Trim());
         userMessage.AppendLine();
+
+        AppendComputedMarketMetrics(userMessage, documents);
+
         userMessage.AppendLine("Retrieved context:");
 
         for (var i = 0; i < documents.Count; i++)
@@ -71,6 +75,97 @@ public sealed class GroundedPromptBuilder : IPromptBuilder
         return new RagPrompt(systemMessage, userMessage.ToString());
     }
 
+    private static void AppendComputedMarketMetrics(StringBuilder builder, IReadOnlyList<RetrievedDocument> documents)
+    {
+        var metrics = documents
+            .Select(TryParseMarketMetrics)
+            .Where(metric => metric is not null)
+            .Cast<MarketMetrics>()
+            .ToArray();
+
+        if (metrics.Length == 0)
+        {
+            return;
+        }
+
+        builder.AppendLine("Computed market metrics from retrieved context:");
+        AppendMaxMetric(builder, "Highest open interest", metrics, metric => metric.OpenInterest, "contracts");
+        AppendMaxMetric(builder, "Highest volume", metrics, metric => metric.Volume, "contracts");
+        AppendMaxMetric(builder, "Highest liquidity", metrics, metric => metric.LiquidityCents, "cents");
+        AppendMinMetric(builder, "Lowest liquidity", metrics, metric => metric.LiquidityCents, "cents");
+        AppendMinMetric(builder, "Tightest Yes bid-ask spread", metrics, metric => metric.YesSpreadCents, "cents");
+        builder.AppendLine("Use these computed metrics for ranking and comparison questions, and cite the listed market IDs.");
+        builder.AppendLine();
+    }
+
+    private static void AppendMaxMetric(
+        StringBuilder builder,
+        string label,
+        IReadOnlyList<MarketMetrics> metrics,
+        Func<MarketMetrics, long?> selector,
+        string unit)
+    {
+        var best = metrics
+            .Where(metric => selector(metric) is not null)
+            .MaxBy(metric => selector(metric));
+
+        if (best is not null)
+        {
+            builder.AppendLine($"- {label}: {FormatMarketMetric(best, selector(best)!.Value, unit)}");
+        }
+    }
+
+    private static void AppendMinMetric(
+        StringBuilder builder,
+        string label,
+        IReadOnlyList<MarketMetrics> metrics,
+        Func<MarketMetrics, long?> selector,
+        string unit)
+    {
+        var best = metrics
+            .Where(metric => selector(metric) is not null)
+            .MinBy(metric => selector(metric));
+
+        if (best is not null)
+        {
+            builder.AppendLine($"- {label}: {FormatMarketMetric(best, selector(best)!.Value, unit)}");
+        }
+    }
+
+    private static string FormatMarketMetric(MarketMetrics metric, long value, string unit) =>
+        $"{metric.Id} ({metric.Title}) = {value} {unit}";
+
+    private static MarketMetrics? TryParseMarketMetrics(RetrievedDocument document)
+    {
+        var activityMatch = ActivitySnapshotRegex().Match(document.Content);
+        var spreadMatch = YesSpreadRegex().Match(document.Content);
+
+        if (!activityMatch.Success && !spreadMatch.Success)
+        {
+            return null;
+        }
+
+        return new MarketMetrics(
+            document.Id,
+            document.Title,
+            TryParseLong(activityMatch, "volume"),
+            TryParseLong(activityMatch, "openInterest"),
+            TryParseLong(activityMatch, "liquidity"),
+            TryParseLong(spreadMatch, "yesSpread"));
+    }
+
+    private static long? TryParseLong(Match match, string groupName)
+    {
+        if (!match.Success || !match.Groups[groupName].Success)
+        {
+            return null;
+        }
+
+        return long.TryParse(match.Groups[groupName].Value, out var value)
+            ? value
+            : null;
+    }
+
     private static string Truncate(string value, int maxCharacters)
     {
         if (string.IsNullOrEmpty(value) || value.Length <= maxCharacters)
@@ -80,4 +175,18 @@ public sealed class GroundedPromptBuilder : IPromptBuilder
 
         return value[..maxCharacters] + "... [truncated]";
     }
+
+    private sealed record MarketMetrics(
+        string Id,
+        string Title,
+        long? Volume,
+        long? OpenInterest,
+        long? LiquidityCents,
+        long? YesSpreadCents);
+
+    [GeneratedRegex(@"Activity snapshot: Volume (?<volume>\d+) contracts; Open interest (?<openInterest>\d+) contracts; Liquidity (?<liquidity>\d+) cents\.", RegexOptions.CultureInvariant)]
+    private static partial Regex ActivitySnapshotRegex();
+
+    [GeneratedRegex(@"Yes spread: (?<yesSpread>\d+) cents\.", RegexOptions.CultureInvariant)]
+    private static partial Regex YesSpreadRegex();
 }
