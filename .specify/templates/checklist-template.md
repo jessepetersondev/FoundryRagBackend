@@ -15,16 +15,18 @@
   - Feature requirements from spec.md
   - Technical context from plan.md
   - Implementation details from tasks.md
+  - FoundryRagBackend constitution gates when the checklist covers planning,
+    implementation, review, safety, or release readiness
   
   DO NOT keep these sample items in the generated checklist file.
   ============================================================================
 -->
 
-## [Category 1]
+## Constitution Compliance
 
-- [ ] CHK001 First checklist item with clear action
-- [ ] CHK002 Second checklist item
-- [ ] CHK003 Third checklist item
+- [ ] CHK001 Controllers avoid direct Azure SDK calls
+- [ ] CHK002 Domain answers follow validation, embedding, retrieval, prompt building, chat completion, and response shaping
+- [ ] CHK003 Grounded responses include source metadata or return the insufficiency response
 
 ## [Category 2]
 

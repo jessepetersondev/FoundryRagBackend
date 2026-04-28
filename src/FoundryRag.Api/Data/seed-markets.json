@@ -1,0 +1,112 @@
+[
+  {
+    "id": "market-001",
+    "title": "Will CPI exceed 3% in March?",
+    "category": "Economics",
+    "description": "Sample market about whether the March consumer price index year-over-year reading is above 3%.",
+    "rules": "This fictional market resolves based on a publicly released CPI report for March.",
+    "outcomes": ["Yes", "No"],
+    "source": "sample-seed-data",
+    "closeDate": "2026-03-31",
+    "notes": "Example only; not live market data."
+  },
+  {
+    "id": "market-002",
+    "title": "Federal Reserve rate decision in June",
+    "category": "Economics",
+    "description": "Sample market tracking whether the Federal Reserve raises, holds, or cuts the federal funds target range at a June meeting.",
+    "rules": "This fictional market resolves from the announced policy decision.",
+    "outcomes": ["Raise", "Hold", "Cut"],
+    "source": "sample-seed-data",
+    "closeDate": "2026-06-17",
+    "notes": "For local RAG demonstration only."
+  },
+  {
+    "id": "market-003",
+    "title": "Presidential approval polling above 50%",
+    "category": "Politics",
+    "description": "Sample market about whether a national polling average reports presidential approval above 50%.",
+    "rules": "This fictional market resolves using a named polling-average snapshot on the close date.",
+    "outcomes": ["Yes", "No"],
+    "source": "sample-seed-data",
+    "closeDate": "2026-05-01",
+    "notes": "Fictional data for an interview project."
+  },
+  {
+    "id": "market-004",
+    "title": "Unemployment rate below 4%",
+    "category": "Economics",
+    "description": "Sample market about whether the monthly unemployment rate is reported below 4%.",
+    "rules": "This fictional market resolves from a labor report release.",
+    "outcomes": ["Yes", "No"],
+    "source": "sample-seed-data",
+    "effectiveDate": "2026-04-03",
+    "notes": "No investment or trading advice implied."
+  },
+  {
+    "id": "market-005",
+    "title": "WTI oil closes above 90 dollars",
+    "category": "Commodities",
+    "description": "Sample market on whether a referenced oil benchmark closes above a threshold.",
+    "rules": "This fictional market resolves based on a closing price from a reference publisher.",
+    "outcomes": ["Above 90", "At or below 90"],
+    "source": "sample-seed-data",
+    "closeDate": "2026-07-31",
+    "notes": "The threshold and dates are sample values."
+  },
+  {
+    "id": "market-006",
+    "title": "New York rainfall exceeds two inches",
+    "category": "Weather",
+    "description": "Sample market about whether measured rainfall in New York City exceeds two inches during a weekend.",
+    "rules": "This fictional market resolves from an official weather station measurement.",
+    "outcomes": ["Yes", "No"],
+    "source": "sample-seed-data",
+    "effectiveDate": "2026-08-15",
+    "notes": "Weather event example for retrieval variety."
+  },
+  {
+    "id": "market-007",
+    "title": "Animated movie opens above 100 million",
+    "category": "Entertainment",
+    "description": "Sample market about whether a fictional animated movie exceeds 100 million dollars in domestic opening weekend box office.",
+    "rules": "This fictional market resolves from a box office reporting estimate.",
+    "outcomes": ["Yes", "No"],
+    "source": "sample-seed-data",
+    "closeDate": "2026-11-23",
+    "notes": "Entertainment example only."
+  },
+  {
+    "id": "market-008",
+    "title": "Metro City wins the soccer championship",
+    "category": "Sports",
+    "description": "Sample market tracking whether a fictional Metro City soccer club wins a championship final.",
+    "rules": "This fictional market resolves from the official match result after regulation, extra time, or penalties.",
+    "outcomes": ["Metro City wins", "Metro City does not win"],
+    "source": "sample-seed-data",
+    "closeDate": "2026-12-12",
+    "notes": "Sports example uses fictional teams."
+  },
+  {
+    "id": "market-009",
+    "title": "US GDP growth above 2%",
+    "category": "Economics",
+    "description": "Sample market about whether a quarterly GDP growth estimate is above 2%.",
+    "rules": "This fictional market resolves from a scheduled economic release.",
+    "outcomes": ["Above 2%", "2% or below"],
+    "source": "sample-seed-data",
+    "effectiveDate": "2026-10-29",
+    "notes": "GDP example for economics questions."
+  },
+  {
+    "id": "market-010",
+    "title": "Election turnout exceeds 60%",
+    "category": "Politics",
+    "description": "Sample market about whether turnout in a fictional statewide election exceeds 60% of registered voters.",
+    "rules": "This fictional market resolves from certified election turnout results.",
+    "outcomes": ["Yes", "No"],
+    "source": "sample-seed-data",
+    "closeDate": "2026-11-04",
+    "notes": "Fictional civic event sample."
+  }
+]

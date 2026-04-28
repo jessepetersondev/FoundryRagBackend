@@ -8,7 +8,10 @@ description: "Task list template for feature implementation"
 **Input**: Design documents from `/specs/[###-feature-name]/`
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
+**Tests**: Unit tests are required for constitution-governed business logic,
+including prompt construction, query validation, failure handling, and response
+shaping. Manual Azure integration checks are required when live Azure resources
+are configured.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -20,10 +23,11 @@ description: "Task list template for feature implementation"
 
 ## Path Conventions
 
-- **Single project**: `src/`, `tests/` at repository root
-- **Web app**: `backend/src/`, `frontend/src/`
-- **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+- **API project**: `src/FoundryRagBackend.Api/`
+- **Tests**: `tests/FoundryRagBackend.Tests/`
+- **Seed data**: `data/seed/`
+- **Documentation**: `README.md` and feature `quickstart.md`
+- Adjust paths only when `plan.md` documents a different real structure
 
 <!-- 
   ============================================================================
@@ -34,6 +38,8 @@ description: "Task list template for feature implementation"
   - Feature requirements from plan.md
   - Entities from data-model.md
   - Endpoints from contracts/
+  - FoundryRagBackend constitution gates for RAG, grounding, Azure boundaries,
+    observability, tests, seed ingestion, and local setup
   
   Tasks MUST be organized by user story so each story can be:
   - Implemented independently
@@ -48,9 +54,9 @@ description: "Task list template for feature implementation"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+- [ ] T001 Create .NET Web API and test project structure per implementation plan
+- [ ] T002 Initialize ASP.NET Core dependencies, Azure SDK dependencies, and test dependencies
+- [ ] T003 [P] Configure nullable reference types, formatting, and local user-secret placeholders
 
 ---
 
@@ -62,12 +68,12 @@ description: "Task list template for feature implementation"
 
 Examples of foundational tasks (adjust based on your project):
 
-- [ ] T004 Setup database schema and migrations framework
-- [ ] T005 [P] Implement authentication/authorization framework
-- [ ] T006 [P] Setup API routing and middleware structure
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure
-- [ ] T009 Setup environment configuration management
+- [ ] T004 Define strongly typed Azure OpenAI, Azure AI Search, and RAG options in src/FoundryRagBackend.Api/Options/
+- [ ] T005 [P] Define interfaces for embedding generation, vector search, chat completion, prompt building, and document ingestion
+- [ ] T006 [P] Setup API routing, dependency injection, correlation/request ID middleware, and consistent error responses
+- [ ] T007 Create shared contracts for question requests, grounded answers, source metadata, and retrieval metadata
+- [ ] T008 Configure structured logging and basic transient Azure retry handling without logging secrets
+- [ ] T009 Add seed data files and local ingestion entry point or endpoint
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -79,21 +85,21 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
+### Tests for User Story 1 (constitution-required where behavior is touched)
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T010 [P] [US1] Unit test for prompt construction in tests/FoundryRagBackend.Tests/Prompts/[test-name].cs
+- [ ] T011 [P] [US1] Unit test for query validation, insufficiency handling, or response shaping in tests/FoundryRagBackend.Tests/Application/[test-name].cs
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
-- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T016 [US1] Add validation and error handling
-- [ ] T017 [US1] Add logging for user story 1 operations
+- [ ] T012 [P] [US1] Create API DTOs or records in src/FoundryRagBackend.Api/Contracts/
+- [ ] T013 [P] [US1] Create domain or retrieval models in src/FoundryRagBackend.Api/Models/
+- [ ] T014 [US1] Implement application workflow service in src/FoundryRagBackend.Api/Application/ (depends on T012, T013)
+- [ ] T015 [US1] Implement HTTP endpoint in src/FoundryRagBackend.Api/Controllers/ without direct Azure SDK calls
+- [ ] T016 [US1] Add validation, insufficiency response behavior, and consistent error handling
+- [ ] T017 [US1] Add structured logging for received query, retrieval count, top scores, prompt path, and model call status
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -105,16 +111,16 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 2 (OPTIONAL - only if tests requested) ⚠️
+### Tests for User Story 2 (constitution-required where behavior is touched)
 
-- [ ] T018 [P] [US2] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T019 [P] [US2] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T018 [P] [US2] Unit test for [behavior] in tests/FoundryRagBackend.Tests/[area]/[test-name].cs
+- [ ] T019 [P] [US2] Manual integration check documented in specs/[###-feature-name]/quickstart.md when Azure resources are required
 
 ### Implementation for User Story 2
 
-- [ ] T020 [P] [US2] Create [Entity] model in src/models/[entity].py
-- [ ] T021 [US2] Implement [Service] in src/services/[service].py
-- [ ] T022 [US2] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T020 [P] [US2] Create [Entity] model in src/FoundryRagBackend.Api/Models/[entity].cs
+- [ ] T021 [US2] Implement [Service] in src/FoundryRagBackend.Api/[area]/[service].cs
+- [ ] T022 [US2] Implement [endpoint/feature] in src/FoundryRagBackend.Api/Controllers/[controller].cs
 - [ ] T023 [US2] Integrate with User Story 1 components (if needed)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
@@ -127,16 +133,16 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 3 (OPTIONAL - only if tests requested) ⚠️
+### Tests for User Story 3 (constitution-required where behavior is touched)
 
-- [ ] T024 [P] [US3] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T025 [P] [US3] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T024 [P] [US3] Unit test for [behavior] in tests/FoundryRagBackend.Tests/[area]/[test-name].cs
+- [ ] T025 [P] [US3] Manual integration check documented in specs/[###-feature-name]/quickstart.md when Azure resources are required
 
 ### Implementation for User Story 3
 
-- [ ] T026 [P] [US3] Create [Entity] model in src/models/[entity].py
-- [ ] T027 [US3] Implement [Service] in src/services/[service].py
-- [ ] T028 [US3] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T026 [P] [US3] Create [Entity] model in src/FoundryRagBackend.Api/Models/[entity].cs
+- [ ] T027 [US3] Implement [Service] in src/FoundryRagBackend.Api/[area]/[service].cs
+- [ ] T028 [US3] Implement [endpoint/feature] in src/FoundryRagBackend.Api/Controllers/[controller].cs
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -150,11 +156,11 @@ Examples of foundational tasks (adjust based on your project):
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] TXXX [P] Documentation updates in docs/
+- [ ] TXXX [P] README updates for architecture, RAG flow, setup, seed ingestion, and tradeoffs
 - [ ] TXXX Code cleanup and refactoring
 - [ ] TXXX Performance optimization across all stories
-- [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
-- [ ] TXXX Security hardening
+- [ ] TXXX [P] Additional unit tests for prompt safety, failure handling, and source metadata
+- [ ] TXXX Prompt-injection and secret-handling hardening
 - [ ] TXXX Run quickstart.md validation
 
 ---
@@ -178,7 +184,7 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Within Each User Story
 
-- Tests (if included) MUST be written and FAIL before implementation
+- Constitution-required tests MUST be written and FAIL before implementation
 - Models before services
 - Services before endpoints
 - Core implementation before integration

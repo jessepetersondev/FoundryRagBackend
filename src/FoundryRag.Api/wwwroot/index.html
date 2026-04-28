@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Foundry RAG</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Foundry RAG</p>
+        <h1>Market Assistant</h1>
+      </div>
+      <div class="status-row" aria-live="polite">
+        <span id="healthBadge" class="badge badge-muted">Checking</span>
+        <button id="healthButton" class="icon-button" type="button" title="Refresh health" aria-label="Refresh health">
+          <span aria-hidden="true">R</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="question-pane" aria-labelledby="questionHeading">
+        <div class="pane-header">
+          <div>
+            <h2 id="questionHeading">Question</h2>
+            <p id="ingestStatus" class="muted" aria-live="polite">Index: market-rag-index</p>
+          </div>
+          <button id="ingestButton" class="secondary-button" type="button">Ingest Seed Data</button>
+        </div>
+
+        <form id="askForm" class="ask-form">
+          <label for="questionInput">Ask</label>
+          <textarea id="questionInput" name="question" rows="7" maxlength="1000" required>What markets involve CPI or inflation?</textarea>
+
+          <div class="form-row">
+            <label for="topKInput">Top K</label>
+            <input id="topKInput" name="topK" type="number" min="1" max="10" value="5">
+            <button id="askButton" class="primary-button" type="submit">Ask</button>
+          </div>
+        </form>
+
+        <div class="samples" aria-label="Sample questions">
+          <button type="button" data-question="What markets involve CPI or inflation?">CPI or inflation</button>
+          <button type="button" data-question="Which markets mention sports championships?">Sports championships</button>
+          <button type="button" data-question="Which markets cover lunar mining permits?">Out-of-index check</button>
+        </div>
+      </section>
+
+      <section class="answer-pane" aria-labelledby="answerHeading">
+        <div class="pane-header">
+          <div>
+            <h2 id="answerHeading">Answer</h2>
+            <p id="retrievalMeta" class="muted">No query yet</p>
+          </div>
+          <span id="requestState" class="badge badge-muted">Idle</span>
+        </div>
+
+        <article id="answerOutput" class="answer-output" aria-live="polite">
+          Submit a question to query the indexed market data.
+        </article>
+
+        <div class="sources-block">
+          <h3>Sources</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody id="sourcesBody">
+                <tr>
+                  <td colspan="4" class="empty-cell">No sources</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>

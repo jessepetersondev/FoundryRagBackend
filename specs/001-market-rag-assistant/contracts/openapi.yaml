@@ -1,0 +1,200 @@
+openapi: 3.0.3
+info:
+  title: Foundry RAG Market Data API
+  version: 1.0.0
+  description: Local backend API for grounded market-data question answering and seed ingestion.
+servers:
+  - url: http://localhost:5000
+paths:
+  /api/ask:
+    post:
+      summary: Ask a grounded question about indexed market data
+      operationId: askMarketQuestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AskRequest'
+            example:
+              question: What markets involve CPI or inflation?
+              topK: 5
+      responses:
+        '200':
+          description: Grounded answer or insufficiency response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AskResponse'
+              example:
+                answer: The indexed data contains markets related to CPI and inflation. [market-001]
+                sources:
+                  - id: market-001
+                    title: Will CPI exceed 3% in March?
+                    category: Economics
+                    score: 0.87
+                    source: seed
+                retrieval:
+                  topKRequested: 5
+                  documentsReturned: 2
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error:
+                  code: InvalidRequest
+                  message: Question is required.
+        '500':
+          description: User-safe service failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/health:
+    get:
+      summary: Return basic service health
+      operationId: getHealth
+      responses:
+        '200':
+          description: Service is running
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: ok
+  /api/dev/ingest:
+    post:
+      summary: Development-only seed ingestion
+      description: Reads local seed JSON, generates embeddings, ensures the vector index, and uploads documents.
+      operationId: ingestSeedData
+      responses:
+        '200':
+          description: Seed data ingested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestResponse'
+              example:
+                documentsRead: 10
+                documentsUploaded: 10
+                indexName: market-rag-index
+        '500':
+          description: User-safe ingestion failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    AskRequest:
+      type: object
+      required:
+        - question
+      properties:
+        question:
+          type: string
+          minLength: 1
+          example: What markets involve CPI or inflation?
+        topK:
+          type: integer
+          minimum: 1
+          maximum: 10
+          nullable: true
+          example: 5
+    AskResponse:
+      type: object
+      required:
+        - answer
+        - sources
+        - retrieval
+      properties:
+        answer:
+          type: string
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceReference'
+        retrieval:
+          $ref: '#/components/schemas/RetrievalMetadata'
+    SourceReference:
+      type: object
+      required:
+        - id
+        - title
+        - category
+        - score
+      properties:
+        id:
+          type: string
+          example: market-001
+        title:
+          type: string
+          example: Will CPI exceed 3% in March?
+        category:
+          type: string
+          example: Economics
+        score:
+          type: number
+          format: double
+          example: 0.87
+        source:
+          type: string
+          nullable: true
+          example: seed
+    RetrievalMetadata:
+      type: object
+      required:
+        - topKRequested
+        - documentsReturned
+      properties:
+        topKRequested:
+          type: integer
+          example: 5
+        documentsReturned:
+          type: integer
+          example: 2
+    HealthResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: ok
+    IngestResponse:
+      type: object
+      required:
+        - documentsRead
+        - documentsUploaded
+        - indexName
+      properties:
+        documentsRead:
+          type: integer
+          example: 10
+        documentsUploaded:
+          type: integer
+          example: 10
+        indexName:
+          type: string
+          example: market-rag-index
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              example: InvalidRequest
+            message:
+              type: string
+              example: Question is required.

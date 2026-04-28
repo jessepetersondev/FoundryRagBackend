@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{264F6324-9622-4118-B8D8-E79808B842A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoundryRag.Api", "src\FoundryRag.Api\FoundryRag.Api.csproj", "{A905D742-3377-4F38-9938-DC280D0BEC47}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E70BA038-BB1F-4B4C-9606-137D9C676624}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoundryRag.Tests", "tests\FoundryRag.Tests\FoundryRag.Tests.csproj", "{DD0D468C-5953-4B9A-A4A8-D6F5D1D2AFD2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A905D742-3377-4F38-9938-DC280D0BEC47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A905D742-3377-4F38-9938-DC280D0BEC47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A905D742-3377-4F38-9938-DC280D0BEC47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A905D742-3377-4F38-9938-DC280D0BEC47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD0D468C-5953-4B9A-A4A8-D6F5D1D2AFD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD0D468C-5953-4B9A-A4A8-D6F5D1D2AFD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD0D468C-5953-4B9A-A4A8-D6F5D1D2AFD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD0D468C-5953-4B9A-A4A8-D6F5D1D2AFD2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A905D742-3377-4F38-9938-DC280D0BEC47} = {264F6324-9622-4118-B8D8-E79808B842A1}
+		{DD0D468C-5953-4B9A-A4A8-D6F5D1D2AFD2} = {E70BA038-BB1F-4B4C-9606-137D9C676624}
+	EndGlobalSection
+EndGlobal

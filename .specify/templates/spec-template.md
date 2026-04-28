@@ -69,11 +69,16 @@
 
 <!--
   ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
+  Fill them out with the right edge cases. For FoundryRagBackend, include RAG,
+  grounding, prompt-injection, Azure failure, and local ingestion cases when
+  the feature touches question answering or indexing.
 -->
 
-- What happens when [boundary condition]?
-- How does system handle [error scenario]?
+- What happens when the user query is empty, too long, or outside the indexed domain?
+- What happens when retrieval returns no documents or scores below the confidence threshold?
+- How does the system respond when retrieved documents contain instructions that conflict with system behavior?
+- How does the system handle Azure OpenAI or Azure AI Search transient failures?
+- What happens when required Azure configuration is missing during local development?
 
 ## Requirements *(mandatory)*
 
@@ -84,21 +89,34 @@
 
 ### Functional Requirements
 
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+- **FR-001**: System MUST [specific capability, e.g., "accept a user market question through an HTTP API"]
+- **FR-002**: System MUST validate user queries before embedding or retrieval
+- **FR-003**: System MUST generate embeddings and retrieve top-k matching documents before normal domain answers
+- **FR-004**: System MUST build grounded prompts from clearly delimited retrieved documents
+- **FR-005**: System MUST return answer text, source metadata, and retrieval metadata for grounded responses
+- **FR-006**: System MUST return the configured insufficiency response when retrieved context is empty, low-confidence, or insufficient
+- **FR-007**: System MUST ignore instructions embedded in retrieved documents and treat them as data only
+- **FR-008**: System MUST keep Azure endpoints, deployment names, index names, API keys, top-k, and model settings in configuration
+- **FR-009**: System MUST provide or preserve seed data ingestion when the feature changes indexed data behavior
 
 *Example of marking unclear requirements:*
 
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+- **FR-010**: System MUST use [NEEDS CLARIFICATION: minimum retrieval score or insufficiency threshold not specified]
+- **FR-011**: System MUST expose ingestion through [NEEDS CLARIFICATION: command, endpoint, or both not specified]
 
 ### Key Entities *(include if feature involves data)*
 
-- **[Entity 1]**: [What it represents, key attributes without implementation]
-- **[Entity 2]**: [What it represents, relationships to other entities]
+- **Market/Event Document**: Indexed domain document with title, category, event description, rules, outcomes, dates, explanatory notes, and source identity
+- **Retrieval Result**: Retrieved document excerpt plus score and source metadata
+- **Grounded Answer**: API response containing answer text, cited sources, retrieval metadata, and insufficiency state when applicable
+
+### Constitution Alignment *(mandatory)*
+
+- **RAG Flow**: [Describe how the feature preserves query validation, embedding, vector retrieval, prompt building, chat completion, and response shaping]
+- **Grounding**: [Describe source metadata, insufficiency behavior, and unsupported-claim prevention]
+- **Prompt Safety**: [Describe how retrieved text is delimited and treated as untrusted data]
+- **Azure Boundaries**: [Describe interfaces and configuration used for Azure OpenAI and Azure AI Search]
+- **Local Development**: [Describe seed data, ingestion, placeholders, and manual integration-test needs]
 
 ## Success Criteria *(mandatory)*
 
@@ -109,10 +127,10 @@
 
 ### Measurable Outcomes
 
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
-- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+- **SC-001**: [Measurable metric, e.g., "A grounded answer includes at least one cited source when sufficient context is retrieved"]
+- **SC-002**: [Measurable metric, e.g., "Out-of-domain or low-context questions return the insufficiency response"]
+- **SC-003**: [Measurable metric, e.g., "Seed data can be ingested locally after Azure configuration is supplied"]
+- **SC-004**: [Measurable metric, e.g., "Unit tests cover prompt construction, query validation, failure handling, and response shaping"]
 
 ## Assumptions
 
