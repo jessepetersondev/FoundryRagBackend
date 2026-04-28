@@ -64,10 +64,39 @@ public sealed class DocumentIngestionService : IDocumentIngestionService
         var builder = new StringBuilder();
         builder.AppendLine($"Title: {document.Title}");
         builder.AppendLine($"Category: {document.Category}");
+        AppendIfPresent(builder, "Ticker", document.Ticker);
+        AppendIfPresent(builder, "Series ticker", document.SeriesTicker);
+        AppendIfPresent(builder, "Market type", document.MarketType);
+        AppendIfPresent(builder, "Status", document.Status);
         builder.AppendLine($"Description: {document.Description}");
         builder.AppendLine($"Rules: {document.Rules}");
         builder.AppendLine($"Outcomes: {string.Join(", ", document.Outcomes)}");
-        builder.AppendLine($"Dates: Effective {document.EffectiveDate ?? "n/a"}; Close {document.CloseDate ?? "n/a"}");
+        builder.AppendLine($"Dates: Effective {document.EffectiveDate ?? "n/a"}; Close {document.CloseDate ?? "n/a"}; Event {document.EventDate ?? "n/a"}; Expiration {document.ExpirationDate ?? "n/a"}");
+        AppendIfPresent(builder, "Resolution source", document.ResolutionSource);
+
+        if (document.YesBidCents is not null || document.YesAskCents is not null ||
+            document.NoBidCents is not null || document.NoAskCents is not null ||
+            document.LastTradePriceCents is not null)
+        {
+            builder.AppendLine(
+                $"Pricing snapshot: Yes bid {FormatCents(document.YesBidCents)}; Yes ask {FormatCents(document.YesAskCents)}; No bid {FormatCents(document.NoBidCents)}; No ask {FormatCents(document.NoAskCents)}; Last trade {FormatCents(document.LastTradePriceCents)}.");
+
+            if (document.YesBidCents is not null && document.YesAskCents is not null)
+            {
+                builder.AppendLine($"Yes spread: {document.YesAskCents - document.YesBidCents} cents.");
+            }
+        }
+
+        if (document.Volume is not null || document.OpenInterest is not null || document.LiquidityCents is not null)
+        {
+            builder.AppendLine(
+                $"Activity snapshot: Volume {FormatContracts(document.Volume)}; Open interest {FormatContracts(document.OpenInterest)}; Liquidity {FormatCents(document.LiquidityCents)}.");
+        }
+
+        if (document.Tags.Count > 0)
+        {
+            builder.AppendLine($"Tags: {string.Join(", ", document.Tags)}");
+        }
 
         if (!string.IsNullOrWhiteSpace(document.Notes))
         {
@@ -76,6 +105,20 @@ public sealed class DocumentIngestionService : IDocumentIngestionService
 
         return builder.ToString();
     }
+
+    private static void AppendIfPresent(StringBuilder builder, string label, string? value)
+    {
+        if (!string.IsNullOrWhiteSpace(value))
+        {
+            builder.AppendLine($"{label}: {value}");
+        }
+    }
+
+    private static string FormatCents(long? value) =>
+        value is null ? "n/a" : $"{value} cents";
+
+    private static string FormatContracts(long? value) =>
+        value is null ? "n/a" : $"{value} contracts";
 
     private void ValidateEmbeddingDimensions(string documentId, IReadOnlyList<float> embedding)
     {

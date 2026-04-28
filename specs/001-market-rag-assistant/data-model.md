@@ -13,8 +13,24 @@ Seed JSON record representing one Kalshi-style market or event.
 | `rules` | string | Yes | Non-empty market resolution or rules text |
 | `outcomes` | string array | Yes | At least one outcome |
 | `source` | string | Yes | Non-empty source label or URL-like reference |
+| `ticker` | string | No | Kalshi-style market ticker for display and retrieval |
+| `seriesTicker` | string | No | Kalshi-style series ticker for grouping related markets |
+| `marketType` | string | No | Contract type such as `Binary` |
+| `status` | string | No | Demo status such as `Open` or `Upcoming` |
 | `effectiveDate` | string or date-time | Conditional | Required if `closeDate` is absent |
 | `closeDate` | string or date-time | Conditional | Required if `effectiveDate` is absent |
+| `eventDate` | string or date-time | No | Date the underlying event or observation occurs |
+| `expirationDate` | string or date-time | No | Date-time the contract expires in the demo data |
+| `resolutionSource` | string | No | Official source used to resolve the sample contract |
+| `yesBidCents` | integer | No | Fictional Yes bid quote in cents |
+| `yesAskCents` | integer | No | Fictional Yes ask quote in cents |
+| `noBidCents` | integer | No | Fictional No bid quote in cents |
+| `noAskCents` | integer | No | Fictional No ask quote in cents |
+| `lastTradePriceCents` | integer | No | Fictional last trade price in cents |
+| `volume` | integer | No | Fictional traded contract volume |
+| `openInterest` | integer | No | Fictional open interest contract count |
+| `liquidityCents` | integer | No | Fictional displayed liquidity in cents |
+| `tags` | string array | No | Search tags such as `macro`, `crypto`, or `weather` |
 | `notes` | string | No | Optional explanatory notes |
 
 Relationships:
@@ -32,7 +48,7 @@ Document uploaded to the vector index.
 | `id` | string | Yes | Key field, copied from `MarketDocument.id` |
 | `title` | string | Yes | Searchable and retrievable |
 | `category` | string | Yes | Searchable, filterable, facetable, retrievable |
-| `content` | string | Yes | Searchable text built from title, category, description, rules, outcomes, dates, and notes |
+| `content` | string | Yes | Searchable text built from title, category, ticker metadata, description, rules, outcomes, dates, resolution source, fictional price/activity snapshot, tags, and notes |
 | `source` | string | Yes | Filterable and retrievable |
 | `effectiveDate` | DateTimeOffset or string | No | Filterable, sortable, retrievable when present |
 | `closeDate` | DateTimeOffset or string | No | Filterable, sortable, retrievable when present |

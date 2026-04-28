@@ -19,6 +19,11 @@ public sealed class SeedDataReaderTests
                 "rules": "Sample rules",
                 "outcomes": ["Yes", "No"],
                 "source": "sample",
+                "ticker": "KXCPIMAR-26-H3",
+                "yesBidCents": 54,
+                "yesAskCents": 56,
+                "volume": 12000,
+                "tags": ["inflation", "macro"],
                 "effectiveDate": "2026-01-01"
               }
             ]
@@ -27,7 +32,13 @@ public sealed class SeedDataReaderTests
 
         var documents = await sut.ReadSeedDataAsync(CancellationToken.None);
 
-        documents.Should().ContainSingle().Which.Id.Should().Be("market-001");
+        var document = documents.Should().ContainSingle().Which;
+        document.Id.Should().Be("market-001");
+        document.Ticker.Should().Be("KXCPIMAR-26-H3");
+        document.YesBidCents.Should().Be(54);
+        document.YesAskCents.Should().Be(56);
+        document.Volume.Should().Be(12000);
+        document.Tags.Should().Equal("inflation", "macro");
     }
 
     [Fact]

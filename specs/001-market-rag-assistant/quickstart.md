@@ -33,12 +33,12 @@ Required settings:
   },
   "Rag": {
     "DefaultTopK": 5,
-    "MaxTopK": 10,
-    "MinScoreThreshold": 0.7,
+    "MaxTopK": 18,
+    "MinScoreThreshold": 0.62,
     "Temperature": 0.1,
-    "MaxOutputTokens": 600,
+    "MaxOutputTokens": 800,
     "MaxQuestionLength": 1000,
-    "MaxContextCharactersPerDocument": 2000,
+    "MaxContextCharactersPerDocument": 1800,
     "EmbeddingDimensions": 1536
   }
 }
@@ -81,8 +81,8 @@ Expected response:
 
 ```json
 {
-  "documentsRead": 10,
-  "documentsUploaded": 10,
+  "documentsRead": 18,
+  "documentsUploaded": 18,
   "indexName": "market-rag-index"
 }
 ```
@@ -99,19 +99,19 @@ Expected response shape:
 
 ```json
 {
-  "answer": "The indexed data contains a CPI inflation sample market. [market-001]",
+  "answer": "The indexed data contains a CPI market about whether June CPI inflation is above 3.0%. [market-001]",
   "sources": [
     {
       "id": "market-001",
-      "title": "Will CPI exceed 3% in March?",
+      "title": "Will June CPI inflation be above 3.0%?",
       "category": "Economics",
       "score": 0.87,
-      "source": "seed"
+      "source": "fictional-kalshi-style-seed-data"
     }
   ],
   "retrieval": {
     "topKRequested": 5,
-    "documentsReturned": 2
+    "documentsReturned": 1
   }
 }
 ```

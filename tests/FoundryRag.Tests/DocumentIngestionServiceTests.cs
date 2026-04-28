@@ -51,6 +51,10 @@ public sealed class DocumentIngestionServiceTests
         uploaded.Should().NotBeNull();
         uploaded!.Should().HaveCount(2);
         uploaded![0].Content.Should().Contain("Title:");
+        uploaded![0].Content.Should().Contain("Ticker: KXCPIMAR-26-H3");
+        uploaded![0].Content.Should().Contain("Pricing snapshot: Yes bid 54 cents; Yes ask 56 cents");
+        uploaded![0].Content.Should().Contain("Activity snapshot: Volume 12000 contracts");
+        uploaded![0].Content.Should().Contain("Tags: inflation, macro");
         uploaded![0].Embedding.Should().Equal(0.1f, 0.2f, 0.3f);
     }
 
@@ -98,7 +102,23 @@ public sealed class DocumentIngestionServiceTests
             Rules = "Resolves from a sample report.",
             Outcomes = ["Yes", "No"],
             Source = "sample",
-            EffectiveDate = "2026-03-01"
+            Ticker = "KXCPIMAR-26-H3",
+            SeriesTicker = "KXCPI",
+            MarketType = "Binary",
+            Status = "Open",
+            EffectiveDate = "2026-03-01",
+            EventDate = "2026-04-10",
+            ExpirationDate = "2026-04-10T14:00:00Z",
+            ResolutionSource = "Bureau of Labor Statistics CPI release",
+            YesBidCents = 54,
+            YesAskCents = 56,
+            NoBidCents = 44,
+            NoAskCents = 46,
+            LastTradePriceCents = 55,
+            Volume = 12000,
+            OpenInterest = 5300,
+            LiquidityCents = 180000,
+            Tags = ["inflation", "macro"]
         };
     }
 }

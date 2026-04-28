@@ -150,6 +150,9 @@ askForm.addEventListener("submit", askQuestion);
 for (const button of sampleButtons) {
   button.addEventListener("click", () => {
     questionInput.value = button.dataset.question;
+    if (button.dataset.topK) {
+      topKInput.value = button.dataset.topK;
+    }
     questionInput.focus();
   });
 }

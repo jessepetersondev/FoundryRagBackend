@@ -27,16 +27,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/AskResponse'
               example:
-                answer: The indexed data contains markets related to CPI and inflation. [market-001]
+                answer: The indexed data contains a CPI market about whether June CPI inflation is above 3.0%. [market-001]
                 sources:
                   - id: market-001
-                    title: Will CPI exceed 3% in March?
+                    title: Will June CPI inflation be above 3.0%?
                     category: Economics
                     score: 0.87
-                    source: seed
+                    source: fictional-kalshi-style-seed-data
                 retrieval:
                   topKRequested: 5
-                  documentsReturned: 2
+                  documentsReturned: 1
         '400':
           description: Invalid request
           content:
@@ -79,8 +79,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/IngestResponse'
               example:
-                documentsRead: 10
-                documentsUploaded: 10
+                documentsRead: 18
+                documentsUploaded: 18
                 indexName: market-rag-index
         '500':
           description: User-safe ingestion failure
@@ -102,7 +102,7 @@ components:
         topK:
           type: integer
           minimum: 1
-          maximum: 10
+          maximum: 18
           nullable: true
           example: 5
     AskResponse:
@@ -133,7 +133,7 @@ components:
           example: market-001
         title:
           type: string
-          example: Will CPI exceed 3% in March?
+          example: Will June CPI inflation be above 3.0%?
         category:
           type: string
           example: Economics
@@ -174,10 +174,10 @@ components:
       properties:
         documentsRead:
           type: integer
-          example: 10
+          example: 18
         documentsUploaded:
           type: integer
-          example: 10
+          example: 18
         indexName:
           type: string
           example: market-rag-index

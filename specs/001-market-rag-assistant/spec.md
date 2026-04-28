@@ -91,7 +91,7 @@ endpoint and a representative ask request.
 - **FR-001**: System MUST provide a question submission endpoint at `POST /api/ask`.
 - **FR-002**: Ask requests MUST accept a `question` string and optional `topK` value.
 - **FR-003**: When `topK` is omitted, the system MUST use the configured default retrieval count.
-- **FR-004**: The system MUST bound requested `topK` by configured minimum and maximum values, with a target range of 1 through 10 for local demonstration.
+- **FR-004**: The system MUST bound requested `topK` by configured minimum and maximum values, with a target range of 1 through 18 for local demonstration.
 - **FR-005**: The system MUST reject empty, whitespace-only, or over-limit questions with HTTP 400 and a clear validation error.
 - **FR-006**: The system MUST generate an embedding for each valid question using the configured Azure OpenAI embedding deployment available through Microsoft Foundry.
 - **FR-007**: The embedding deployment name MUST be configurable, and the question embedding MUST be compatible with the configured vector index dimensionality.
@@ -217,7 +217,7 @@ Errors MUST support this shape:
 - The primary user is a developer, interviewer, or evaluator running a local backend demonstration.
 - The dataset is intentionally small and static, with no live Kalshi API integration.
 - The default `topK` is 5 unless changed in configuration.
-- The maximum `topK` is 10 unless changed in configuration.
+- The maximum `topK` is 18 unless changed in configuration.
 - The minimum relevance threshold is configurable and may be set conservatively for local demonstration.
 - No retrieved documents is treated as insufficient context and does not require a chat completion call by default.
 - The seed dataset is authoritative only for demonstration questions about included market/event records.

@@ -33,19 +33,22 @@
 
         <form id="askForm" class="ask-form">
           <label for="questionInput">Ask</label>
-          <textarea id="questionInput" name="question" rows="7" maxlength="1000" required>What markets involve CPI or inflation?</textarea>
+          <textarea id="questionInput" name="question" rows="7" maxlength="1000" required>Which market has the highest open interest?</textarea>
 
           <div class="form-row">
             <label for="topKInput">Top K</label>
-            <input id="topKInput" name="topK" type="number" min="1" max="10" value="5">
+            <input id="topKInput" name="topK" type="number" min="1" max="18" value="18">
             <button id="askButton" class="primary-button" type="submit">Ask</button>
           </div>
         </form>
 
         <div class="samples" aria-label="Sample questions">
-          <button type="button" data-question="What markets involve CPI or inflation?">CPI or inflation</button>
-          <button type="button" data-question="Which markets mention sports championships?">Sports championships</button>
-          <button type="button" data-question="Which markets cover lunar mining permits?">Out-of-index check</button>
+          <button type="button" data-question="What markets involve CPI or inflation?" data-top-k="5">CPI or inflation</button>
+          <button type="button" data-question="Which market has the highest open interest?" data-top-k="18">Open interest</button>
+          <button type="button" data-question="Which markets have the tightest Yes bid-ask spread?" data-top-k="18">Tightest spread</button>
+          <button type="button" data-question="Which crypto markets are in the seed data?" data-top-k="8">Crypto markets</button>
+          <button type="button" data-question="Which markets mention sports championships?" data-top-k="8">Sports championships</button>
+          <button type="button" data-question="Which markets cover lunar mining permits?" data-top-k="5">Out-of-index check</button>
         </div>
       </section>
 

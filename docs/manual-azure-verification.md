@@ -107,8 +107,8 @@ Expected shape:
 
 ```json
 {
-  "documentsRead": 10,
-  "documentsUploaded": 10,
+  "documentsRead": 18,
+  "documentsUploaded": 18,
   "indexName": "market-rag-index"
 }
 ```

@@ -70,8 +70,8 @@ Expected ingestion response:
 
 ```json
 {
-  "documentsRead": 10,
-  "documentsUploaded": 10,
+  "documentsRead": 18,
+  "documentsUploaded": 18,
   "indexName": "market-rag-index"
 }
 ```
@@ -157,7 +157,7 @@ Current RAG defaults:
 {
   "Rag": {
     "DefaultTopK": 5,
-    "MaxTopK": 10,
+    "MaxTopK": 18,
     "MinScoreThreshold": 0.62,
     "Temperature": 0.1,
     "MaxOutputTokens": 800,
@@ -246,13 +246,13 @@ Example response shape:
 
 ```json
 {
-  "answer": "The indexed data contains a CPI market about whether the March CPI year-over-year reading exceeds 3%. [market-001]",
+  "answer": "The indexed data contains a CPI market about whether June CPI inflation is above 3.0%. The fictional snapshot includes ticker KXCPIMONTH-26JUN-T3 and a 54/56 cent Yes bid-ask. [market-001]",
   "sources": [
     {
       "id": "market-001",
-      "title": "Will CPI exceed 3% in March?",
+      "title": "Will June CPI inflation be above 3.0%?",
       "category": "Economics",
-      "source": "sample-seed-data",
+      "source": "fictional-kalshi-style-seed-data",
       "score": 0.69
     }
   ],
@@ -266,10 +266,13 @@ Example response shape:
 Good demo questions:
 
 - What markets involve CPI or inflation?
+- Which market has the highest open interest? Use topK 18.
+- Which markets have the tightest Yes bid-ask spread? Use topK 18.
+- Which markets mention Fed rates or payrolls?
+- Which crypto markets are in the seed data?
+- Which weather markets have less than 100,000 cents of liquidity?
 - Which markets mention sports championships?
-- Which sample markets are in the Economics category?
 - Are there any weather-related markets?
-- Which markets mention elections or polling?
 - Which markets cover lunar mining permits?
 
 The lunar mining question should return an insufficiency response because that
@@ -301,9 +304,9 @@ Ask response:
   "sources": [
     {
       "id": "market-001",
-      "title": "Will CPI exceed 3% in March?",
+      "title": "Will June CPI inflation be above 3.0%?",
       "category": "Economics",
-      "source": "sample-seed-data",
+      "source": "fictional-kalshi-style-seed-data",
       "score": 0.69
     }
   ],

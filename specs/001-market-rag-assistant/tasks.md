@@ -120,7 +120,7 @@
 
 ### Implementation for User Story 3
 
-- [X] T036 [US3] Create representative seed dataset with 8-12 market/event documents in `src/FoundryRag.Api/Data/seed-markets.json`; validate with `jq . src/FoundryRag.Api/Data/seed-markets.json` or equivalent JSON parse; expected output: valid JSON with required fields.
+- [X] T036 [US3] Create representative seed dataset with 18 Kalshi-style market/event documents in `src/FoundryRag.Api/Data/seed-markets.json`; validate with `jq . src/FoundryRag.Api/Data/seed-markets.json` or equivalent JSON parse; expected output: valid JSON with required fields.
 - [X] T037 [US3] Implement `SeedDataReader` in `src/FoundryRag.Api/Services/SeedDataReader.cs` reading `src/FoundryRag.Api/Data/seed-markets.json`, validating required fields, and returning `MarketDocument` records; validate with `dotnet test FoundryRagBackend.sln --filter SeedDataReaderTests`; expected output: seed reader tests pass.
 - [X] T038 [US3] Implement `AzureAiSearchVectorService.EnsureIndexCreatedAsync` in `src/FoundryRag.Api/Services/AzureAiSearchVectorService.cs` with fields `id`, `title`, `category`, `content`, `source`, `effectiveDate`, and vector `embedding` using an HNSW vector profile; validate with `dotnet build FoundryRagBackend.sln`; expected output: index creation code compiles.
 - [X] T039 [US3] Implement `AzureAiSearchVectorService.UploadDocumentsAsync` in `src/FoundryRag.Api/Services/AzureAiSearchVectorService.cs` using merge-or-upload behavior for `IndexedDocument` records; validate with `dotnet build FoundryRagBackend.sln`; expected output: upload code compiles.
